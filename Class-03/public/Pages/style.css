@@ -78,3 +78,25 @@ body {
      font-weight: bold;
      color: #0D6EFD;
   }
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+    padding: 20px;
+    margin-top: 25px;
+  }
+  .signup-form{
+    padding: 20px;
+  }
+}
+@media (max-width: 480px) {
+  /* Styles for very small screens */
+  body {
+    font-size: 10px;
+  }
+  .signup-form{
+    padding: 15px;
+    width: 80%;
+  }
+  /* Other styles */
+}

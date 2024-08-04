@@ -40,7 +40,7 @@ import {
   
       const userResponse = await setDoc(doc(db, "users", uid), userObj);
       alert("user successfully signup")
-      window.location.href = "./login.html"
+      window.location.href = "../index.html"
       // console.log("userResponse", userResponse);
       // console.log(response, "response");
     } catch (error) {

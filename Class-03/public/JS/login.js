@@ -3,7 +3,7 @@
 
 window.addEventListener("load", () => {
   if (localStorage.getItem("user")) {
-    window.location.replace("../index.html");
+    window.location.replace("../Pages/dashboard.html");
  }
 });
 
@@ -23,7 +23,7 @@ const loginHandler = async () => {
     );
     console.log("respoonse", response.user.uid);
     localStorage.setItem("user", response.user.uid)
-      window.location.replace("../index.html");
+      window.location.replace("../Pages/dashboard.html");
       console.log(response, "response");
       alert("Login successful")
       

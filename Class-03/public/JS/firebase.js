@@ -10,6 +10,7 @@ import {
     signInWithEmailAndPassword,
   } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js";
   
+  import {  getStorage, ref, uploadBytesResumable, getDownloadURL  } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-storage.js";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,7 +32,8 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // Initialize Firebase Authentication and get a reference to the service
 const auth = getAuth(app);
-
+// Create a root reference
+const storage = getStorage();
 
 
 export{
@@ -49,6 +51,11 @@ export{
     auth,
     setDoc,
     getDoc,
+    getStorage,
+     ref,
+      uploadBytesResumable, 
+      getDownloadURL,
+      storage
 
     
 }

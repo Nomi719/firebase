@@ -1,13 +1,13 @@
 window.addEventListener("load", () => {
     console.log(localStorage.getItem("user"));
     if (!localStorage.getItem("user")) {
-      window.location.replace("../Pages/login.html");
+      window.location.replace("../index.html");
     }
   });
 
 
 
-import { addDoc, collection, db, deleteDoc, doc, getDocs, updateDoc, getDoc } from "./firebase.js"
+import { addDoc, collection, db, deleteDoc, doc, getDocs, updateDoc, getDoc,storage, ref, uploadBytesResumable, getDownloadURL } from "./firebase.js"
 
 const todoCollection = collection(db, "todos")
 const todoParent = document.querySelector(".parent")
@@ -103,7 +103,7 @@ const addTodo = async () => {
 
 window.addEventListener("load", async()=>{
   if(!localStorage.getItem("user")){
-      window.location.href = "login.html";
+      window.location.href = "../index.html";
   }
 
 console.log(localStorage.getItem("user"))
@@ -170,13 +170,107 @@ gender.value = `${response.data().gender}`;
           alert(error.message)
       }
     }
-
+    
     const logoutBtn = () => {
-        localStorage.removeItem("user");
-        localStorage.clear();
-        window.location.replace("../Pages/login.html");
-      };
+      localStorage.removeItem("user");
+      localStorage.clear();
+      window.location.replace("../index.html");
+    };
+    
+    //-------------profile upload--------------//
+
+
+      const uploadProfilePic = async (e) => {
+        try {
+          const storageRef = ref(storage,`images/${localStorage.getItem("user")}`)
+
+            // Create file metadata including the content type
+    /** @type {any} */
+    const metadata = {
+      contentType: 'image/jpeg',
+  };
+
+  // Upload the file and metadata
+  let uploadTask = await uploadBytes(storageRef, e.target.files[0], metadata)
+
+  window.location.reload()
       
+        } catch (error) {
+          alert(error.message)
+          
+        }
+        }
+
+
+        const getProfileImg = async () => {
+          try {
+              const profileImage1 = document.querySelector("#profileImage1");
+              const storageRef = ref(storage, `images/${localStorage.getItem("user")}`);
+              const url = await getDownloadURL(storageRef)
+              profileImage1.src = `${url}`
+      
+      
+          } catch (error) {
+              profileImage1.classList.add("d-none")
+              profileImage1.parentNode.style.background = "green"
+              
+          }
+      }
+
+      const inputInvoke = () => {
+        const fileInput = document.querySelector("#fileInput")
+        fileInput.click()
+    }
+      //---------------imageupload through storage======//
+
+      const inputImg = async (element) => {
+        console.log("inputImg", element.files[0]);
+        const file = element.files[0];
+
+          // Create the file metadata
+  /** @type {any} */
+  const metadata = {
+    contentType: "image/jpeg",
+  };
+
+   // Upload file and metadata to the object 'images/mountains.jpg'
+   const storageRef = ref(storage, "images/" + file.name);
+   const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        console.log("error", error);
+      },
+      () => {
+         // Upload completed successfully, now we can get the download URL
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log("File available at", downloadURL);
+        // user updatez`
+      });
+    }
+  );
+};
+
+
+
+
+
+
 
 window.addEventListener("load", getTodos)
 window.addTodo = addTodo
@@ -184,6 +278,9 @@ window.editTodo = editTodo
 window.deleteTodo = deleteTodo
 window.deleteAllTodo = deleteAllTodo
 window.logoutBtn = logoutBtn
+window.inputImg = inputImg
+window.uploadProfilePic = uploadProfilePic
+window.getProfileImg = getProfileImg
 
 
 
